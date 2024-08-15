@@ -44,11 +44,11 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional
     @Override
     public void deleteStudent(Long studentId) throws NotFoundException {
-        try {
-            this.studentRepository.deleteById(studentId);
-        } catch (Exception e) {
+        if (!studentRepository.existsById(studentId)) {
             throw new NotFoundException("No se encontró el alúmno con el ID: ".concat(studentId.toString()));
         }
+
+        this.studentRepository.deleteById(studentId);
     }
 
     @Transactional
