@@ -16,6 +16,7 @@ public class StudentRequestDTO {
 
     @JsonProperty("last_name")
     private String lastName;
+    private String email;
     private int age;
     private List<TaskRequestDTO> tasks;
 }

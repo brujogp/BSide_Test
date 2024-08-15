@@ -25,6 +25,7 @@ public class TaskServiceImpl implements ITaskService {
 
     static TaskEntity mapTasks(TaskRequestDTO task, StudentEntity student) {
         TaskEntity entity = new TaskEntity();
+
         entity.setTaskName(task.getTaskName());
         entity.setFinishDate(task.getFinishDate());
         entity.setStudent(student);

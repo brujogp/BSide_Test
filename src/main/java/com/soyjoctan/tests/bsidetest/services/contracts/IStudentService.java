@@ -2,7 +2,6 @@ package com.soyjoctan.tests.bsidetest.services.contracts;
 
 import com.soyjoctan.tests.bsidetest.data.StudentRequestDTO;
 import com.soyjoctan.tests.bsidetest.data.entities.StudentEntity;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

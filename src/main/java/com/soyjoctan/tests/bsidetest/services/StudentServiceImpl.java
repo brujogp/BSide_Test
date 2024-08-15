@@ -3,7 +3,6 @@ package com.soyjoctan.tests.bsidetest.services;
 import com.soyjoctan.tests.bsidetest.data.StudentRequestDTO;
 import com.soyjoctan.tests.bsidetest.data.TaskRequestDTO;
 import com.soyjoctan.tests.bsidetest.data.entities.StudentEntity;
-import com.soyjoctan.tests.bsidetest.data.entities.TaskEntity;
 import com.soyjoctan.tests.bsidetest.data.repositories.StudentsRepository;
 import com.soyjoctan.tests.bsidetest.data.repositories.TaskRepository;
 import com.soyjoctan.tests.bsidetest.expections.customs.NoSuppliedIdStudentException;
@@ -29,7 +28,7 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional
     @Override
     public StudentEntity createNewStudent(StudentRequestDTO newStudent) {
-        return savingStudentWithTasks(newStudent);
+        return createStudentEntity(newStudent);
     }
 
     @Override
@@ -56,14 +55,29 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public StudentEntity updateStudent(StudentRequestDTO student) throws NoSuppliedIdStudentException {
         Optional.ofNullable(student.getId()).orElseThrow(() -> new NoSuppliedIdStudentException("Es necesario suministrar el ID de un estudiante existente"));
-        return savingStudentWithTasks(student);
+        return getExistingStudentEntity(student);
     }
 
-    private StudentEntity savingStudentWithTasks(StudentRequestDTO newStudentDto) {
-        StudentEntity studentEntity = new StudentEntity();
+    @Transactional
+    protected StudentEntity createStudentEntity(StudentRequestDTO newStudentDto) {
+        return savingStudentWithTasks(newStudentDto, new StudentEntity());
+    }
+
+    @Transactional
+    protected StudentEntity getExistingStudentEntity(StudentRequestDTO newStudentDto) throws NotFoundException {
+        StudentEntity studentEntity = studentRepository
+                .findById(newStudentDto.getId())
+                .orElseThrow(() -> new NotFoundException("No se encontró el alúmno con el ID: ".concat(newStudentDto.getId().toString())));
+
+        return savingStudentWithTasks(newStudentDto, studentEntity);
+    }
+
+    @Transactional
+    protected StudentEntity savingStudentWithTasks(StudentRequestDTO newStudentDto, StudentEntity studentEntity) {
         studentEntity.setFirstName(newStudentDto.getFirstName());
         studentEntity.setLastName(newStudentDto.getLastName());
         studentEntity.setAge(newStudentDto.getAge());
+        studentEntity.setEmail(newStudentDto.getEmail());
         studentEntity.setId(newStudentDto.getId());
 
         StudentEntity savedStudentEntity = studentRepository.save(studentEntity);
