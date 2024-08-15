@@ -2,13 +2,12 @@ package com.soyjoctan.tests.bsidetest.services;
 
 import com.soyjoctan.tests.bsidetest.data.entities.StudentEntity;
 import com.soyjoctan.tests.bsidetest.data.repositories.StudentsRepository;
-import com.soyjoctan.tests.bsidetest.expections.NotFoundException;
+import com.soyjoctan.tests.bsidetest.expections.customs.NotFoundException;
 import com.soyjoctan.tests.bsidetest.services.contracts.IStudentService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
