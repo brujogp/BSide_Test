@@ -1,12 +1,13 @@
 package com.soyjoctan.tests.bsidetest.services.contracts;
 
+import com.soyjoctan.tests.bsidetest.data.StudentRequestDTO;
 import com.soyjoctan.tests.bsidetest.data.entities.StudentEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IStudentService {
-    StudentEntity createNewStudent(StudentEntity newStudent);
+    StudentEntity createNewStudent(StudentRequestDTO newStudent);
 
     List<StudentEntity> getAllStudent();
 
@@ -14,5 +15,5 @@ public interface IStudentService {
 
     void deleteStudent(Long studentId);
 
-    StudentEntity updateStudent(StudentEntity student);
+    StudentEntity updateStudent(StudentRequestDTO student);
 }

@@ -1,9 +1,12 @@
 package com.soyjoctan.tests.bsidetest.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -14,13 +17,16 @@ public class StudentEntity {
     private Long id;
 
     @Column(name = "first_name")
-    @JsonProperty("first_name")
     String firstName;
 
     @Column(name = "last_name")
-    @JsonProperty("last_name")
     String lastName;
 
     @Column(name = "age")
     int age;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    List<TaskEntity> tasks;
+
 }

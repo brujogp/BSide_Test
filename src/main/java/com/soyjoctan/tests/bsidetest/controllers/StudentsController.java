@@ -1,6 +1,6 @@
 package com.soyjoctan.tests.bsidetest.controllers;
 
-import com.soyjoctan.tests.bsidetest.data.entities.StudentEntity;
+import com.soyjoctan.tests.bsidetest.data.StudentRequestDTO;
 import com.soyjoctan.tests.bsidetest.services.contracts.IStudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +22,19 @@ public class StudentsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllStudent() {
-        return ResponseEntity.ok(this.studentService.getAllStudent());
+    public ResponseEntity<?> getAllStudents() {
+        var response = this.studentService.getAllStudent();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<?> createNewStudent(@RequestBody StudentEntity student) {
-        return new ResponseEntity<>(this.studentService.createNewStudent(student), HttpStatus.CREATED);
+    public ResponseEntity<?> createNewStudent(@RequestBody StudentRequestDTO student) {
+        var response = this.studentService.createNewStudent(student);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping()
-    public ResponseEntity<?> getStudentInfo(@RequestBody StudentEntity studentToUpdate) {
+    @PutMapping
+    public ResponseEntity<?> updateStudentInfo(@RequestBody StudentRequestDTO studentToUpdate) {
         return ResponseEntity.ok(this.studentService.updateStudent(studentToUpdate));
     }
 
