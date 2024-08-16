@@ -27,7 +27,7 @@ public class StudentsController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @PostMapping(path = {"/", ""})
     public ResponseEntity<?> createNewStudent(@RequestBody StudentRequestDTO student) {
         var response = this.studentService.createNewStudent(student);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
