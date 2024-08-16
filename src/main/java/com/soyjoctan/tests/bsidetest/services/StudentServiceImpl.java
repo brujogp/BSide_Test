@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Collection;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
@@ -54,7 +57,7 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional
     @Override
     public StudentEntity updateStudent(StudentRequestDTO student) throws NoSuppliedIdStudentException {
-        Optional.ofNullable(student.getId()).orElseThrow(() -> new NoSuppliedIdStudentException("Es necesario suministrar el ID de un estudiante existente"));
+        Optional.ofNullable(student.id()).orElseThrow(() -> new NoSuppliedIdStudentException("Es necesario suministrar el ID de un estudiante existente"));
         return getExistingStudentEntity(student);
     }
 
@@ -66,27 +69,27 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional
     protected StudentEntity getExistingStudentEntity(StudentRequestDTO newStudentDto) throws NotFoundException {
         StudentEntity studentEntity = studentRepository
-                .findById(newStudentDto.getId())
-                .orElseThrow(() -> new NotFoundException("No se encontró el alúmno con el ID: ".concat(newStudentDto.getId().toString())));
+                .findById(newStudentDto.id())
+                .orElseThrow(() -> new NotFoundException("No se encontró el alúmno con el ID: ".concat(newStudentDto.id().toString())));
 
         return savingStudentWithTasks(newStudentDto, studentEntity);
     }
 
     @Transactional
     protected StudentEntity savingStudentWithTasks(StudentRequestDTO newStudentDto, StudentEntity studentEntity) {
-        studentEntity.setFirstName(newStudentDto.getFirstName());
-        studentEntity.setLastName(newStudentDto.getLastName());
-        studentEntity.setAge(newStudentDto.getAge());
-        studentEntity.setEmail(newStudentDto.getEmail());
-        studentEntity.setId(newStudentDto.getId());
+        studentEntity.setFirstName(newStudentDto.firstName());
+        studentEntity.setLastName(newStudentDto.lastName());
+        studentEntity.setAge(newStudentDto.age());
+        studentEntity.setEmail(newStudentDto.email());
+        studentEntity.setId(newStudentDto.id());
 
         StudentEntity savedStudentEntity = studentRepository.save(studentEntity);
 
-        Optional<List<TaskRequestDTO>> optionalTaskListsDto = Optional.ofNullable(newStudentDto.getTasks());
+        Optional<List<TaskRequestDTO>> optionalTaskListsDto = Optional.ofNullable(newStudentDto.tasks());
         optionalTaskListsDto.ifPresent(tasks -> {
             tasksRepository.saveAll(tasks.stream()
                     .map(itemTask -> TaskServiceImpl.mapTasks(itemTask, savedStudentEntity))
-                    .collect(Collectors.toList()));
+                    .toList());
 
         });
 
